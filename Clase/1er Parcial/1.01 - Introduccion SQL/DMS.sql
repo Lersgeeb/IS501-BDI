@@ -31,3 +31,19 @@ INSERT INTO Tarea(id_lista, descripcion) VALUES
     (2, "Metal Gear Solid Collection."),
     (3, "El Silencio de los Ino...")
 ;
+
+-- Actualización
+
+--UPDATE TABLA SET CAMPO = VALOR WHERE CONDICIONAL
+UPDATE Tarea SET estado = "completada" WHERE id = 1;
+
+--Consultas
+SELECT Tarea.id, Tarea.id_lista, Lista.id_usuario, Tarea.descripcion FROM tarea JOIN Lista On Tarea.id_lista = Lista.id;
+
+SELECT Lista.id_usuario AS "Identidicador de Usuario", COUNT(*) AS "Cantidad de tareas del usuario" FROM Tarea JOIN Lista ON Tarea.id_lista = Lista.id GROUP BY Lista.id_usuario;
+
+SELECT Lista.id_usuario AS "Identificador de Usuario", Tarea.estado AS "Estado de la Tarea", COUNT(*) AS "Cantidad de Tareas" FROM Tarea JOIN Lista ON Tarea.id_lista = Lista.id GROUP BY Lista.id_usuario, Tarea.estado;
+
+
+--SubConsulta
+SELECT Lista.id_usuario AS "Identificador de Usuario", Tarea.estado AS "Estado de la Tarea", COUNT(*) AS "Cantidad de Tareas" , (SELECT COUNT(*) FROM Tarea JOIN Lista ON Tarea.id_lista = Lista.id WHERE Lista.id_usuario = Usuario.id) AS "Total de Registros del Usuario", CONCAT(COUNT(*)/(SELECT COUNT(*) FROM Tarea JOIN Lista ON Tarea.id_lista = Lista.id WHERE Lista.id_usuario = Usuario.id)*100, " %") AS "Porcentaje" FROM Tarea JOIN Lista ON Tarea.id_lista = Lista.id JOIN Usuario on Lista.id_usuario = Usuario.id GROUP BY Lista.id_usuario, Tarea.estado;
