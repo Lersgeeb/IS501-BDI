@@ -15,18 +15,19 @@ USE GameCatalogue;
 
     CREATE TABLE IF NOT EXISTS Game(
         id INT AUTO_INCREMENT PRIMARY KEY,
-        tex_name TEXT NOT NULL, 
+        tex_name TEXT NOT NULL
     ) CHARACTER SET utf8;
 
     CREATE TABLE IF NOT EXISTS GamePlayer(
         id INT AUTO_INCREMENT PRIMARY KEY,
         id_player INT NOT NULL, -- Aplicar la restricción de integridad referencial
         id_game INT NOT NULL, -- Aplicar la restricción de integridad referencial
-        tim_lastPlayed
+        tim_lastPlayed TIMESTAMP DEFAULT NOW(),
         cod_state ENUM('on-progress', 'not-played', 'beated') DEFAULT 'not-played'
     ) CHARACTER SET utf8;
 
-
+/*
+USE GameCatalogue;
 -- ELliminar Tablas
 DROP TABLE Player;
 DROP TABLE Game;
@@ -34,7 +35,7 @@ DROP TABLE GamePlayer;
 
 -- ELliminar la Base de Datos
 DROP DATABASE GameCatalogue;
-
+*/
 
 /*
     Se le pide al estudiante:

@@ -1,4 +1,6 @@
 
+USE EmpresaBD;
+
 -- Se agregan datos de prueba a las tablas.
 
 INSERT INTO Gerencia(nombre) VALUES
@@ -38,7 +40,7 @@ INSERT INTO Tarea(id_lista, descripcion) VALUES
 UPDATE Tarea SET estado = "completada" WHERE id = 1;
 
 --Consultas
-SELECT Tarea.id, Tarea.id_lista, Lista.id_usuario, Tarea.descripcion FROM tarea JOIN Lista On Tarea.id_lista = Lista.id;
+SELECT Tarea.id, Tarea.id_lista, Lista.id_usuario, Tarea.descripcion FROM Tarea JOIN Lista On Tarea.id_lista = Lista.id;
 
 SELECT Lista.id_usuario AS "Identidicador de Usuario", COUNT(*) AS "Cantidad de tareas del usuario" FROM Tarea JOIN Lista ON Tarea.id_lista = Lista.id GROUP BY Lista.id_usuario;
 
