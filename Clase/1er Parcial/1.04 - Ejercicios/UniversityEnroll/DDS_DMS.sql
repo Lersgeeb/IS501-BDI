@@ -1,0 +1,47 @@
+CREATE DATABASE UniEnroll;
+
+USE UniEnroll;
+
+CREATE TABLE IF NOT EXISTS Student(
+    id INT PRIMARY KEY  AUTO_INCREMENT NOT NULL,
+    txt_first_name TEXT NOT NULL,
+    txt_last_name TEXT NOT NULL,
+);
+
+CREATE TABLE IF NOT EXISTS Class(
+    id INT PRIMARY KEY  AUTO_INCREMENT NOT NULL,
+    txt_name TEXT NOT NULL,
+    int_uv TINYINT NOT NULL,
+    chr_code CHAR(6)
+);
+
+CREATE TABLE IF NOT EXISTS Teacher(
+    emp_id INT PRIMARY KEY  AUTO_INCREMENT NOT NULL,
+    txt_first_name TEXT NOT NULL,
+    txt_last_name TEXT NOT NULL,
+    dec_salary DECIMAL(6,2)
+);
+
+CREATE TABLE IF NOT EXISTS Enroll(
+    id INT PRIMARY KEY  AUTO_INCREMENT NOT NULL,
+    id_student INT NOT NULL,
+    id_class INT NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS Work_on(
+    id INT PRIMARY KEY  AUTO_INCREMENT NOT NULL,
+    id_teacher INT NOT NULL,
+    id_class INT NOT NULL
+);
+
+ALTER TABLE Enroll
+ADD CONSTRAINT ENROLL_STD_FK
+    FOREIGN KEY (id_student) REFERENCES Student (id),
+ADD CONSTRAINT ENROLL_CLSS_FK
+    FOREIGN KEY (id_class) REFERENCES Class (id);
+
+ALTER TABLE Work_on
+ADD CONSTRAINT WORK_TCHR_FK
+    FOREIGN KEY (id_teacher) REFERENCES Teacher (id),
+ADD CONSTRAINT WORK_CLSS_FK
+    FOREIGN KEY (id_class) REFERENCES Class (id);
