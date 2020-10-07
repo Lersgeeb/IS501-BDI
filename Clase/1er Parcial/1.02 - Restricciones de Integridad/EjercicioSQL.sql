@@ -37,9 +37,28 @@ DROP TABLE GamePlayer;
 DROP DATABASE GameCatalogue;
 */
 
+
 /*
     Se le pide al estudiante:
         - Crear el diagrama y el modelo ER.
         - Aplicar en SQl las restricciones de integridad de Foreign Key basado en su ER.
         - Aplicar las restricciones de integridad mediante CREATE TABLE y mediante ALTER TABLE.
 */
+
+    ALTER TABLE GamePlayer
+    ADD CONSTRAINT PLAYERFK
+            FOREIGN KEY (id_player) REFERENCES Player (id)
+                ON DELETE RESTRICT ON UPDATE RESTRICT,
+    ADD CONSTRAINT GAMEFK
+            FOREIGN KEY (id_game) REFERENCES Game (id)
+                ON DELETE RESTRICT ON UPDATE RESTRICT;
+    
+    
+/*  
+Ver información de las restricciones
+
+USE information_schema
+SELECT * FROM TABLE_CONSTRAINTS;
+*/
+
+    
