@@ -12,7 +12,7 @@ CREATE TABLE IF NOT EXISTS Student(
 CREATE TABLE IF NOT EXISTS Class(
     id INT PRIMARY KEY  AUTO_INCREMENT NOT NULL,
     txt_name TEXT NOT NULL,
-    int_uv TINYINT NOT NULL,
+    tiny_uv TINYINT NOT NULL,
     chr_code CHAR(6)
 );
 
@@ -128,6 +128,4 @@ SELECT * FROM Work_on;
       SELECT AVG(prom.Class_total) FROM (SELECT e.id_student, COUNT(*) AS "Class_total" FROM Enroll AS e GROUP BY e.id_student) AS prom;
 
     Promedio de asignaturas asignadas a un catedrático.
-
-
 */
