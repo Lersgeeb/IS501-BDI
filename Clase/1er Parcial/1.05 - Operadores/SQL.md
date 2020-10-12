@@ -52,3 +52,11 @@ La cláusula HAVING se usa en SQL para cuando existen condicionales que no puede
 
 
 
+@date 2020/10/12
+
+álgebra Relacional
+====
+
+- JOIN: Retorna los registros que tienen un **match** en ambas tablas.
+- LEFT JOIN: Devuelve todos los registros de la tabla izquierda (tabla1) y los registros coincidentes de la tabla de la derecha (tabla2). El resultado es NULL desde el lado derecho, si no hay coincidencia.
+- RIGHT JOIN: Devuelve todos los registros de la tabla derecha (tabla2) y los registros coincidentes de la tabla de la izquierda (tabla1). El resultado es NULL desde el lado izquierda, si no hay coincidencia.
