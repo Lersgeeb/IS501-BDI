@@ -24,9 +24,9 @@ INSERT INTO PCInventory(tex_name, sma_ram, sma_ssd) VALUES
     ("Dell XPS 17 4", 128, 256),
     ("Dell XPS 17 5", 128, 32),
     ("Dell XPS 17 6", 128, 256),
-    ("Dell XPS 17 7", 8, 64),
-    ("Dell XPS 17 8", 8, 128),
-    ("Dell XPS 17 9", 8, 256)
+    ("Asus PD2020", 8, 64),
+    ("Acer W28", 8, 128),
+    ("Acer W29", 8, 256)
 ;
 
 -- Listar todos los computadores del inventario
@@ -50,10 +50,31 @@ SELECT sma_ram AS "RAM", COUNT(*) AS "Cantidad" FROM PCInventory GROUP BY sma_ra
 --  Cuántos computadores hay por cantidad de RAM, mostrando solo 3 registro de los grupos donde hay o más dispositivos, ordenados de mayor a menor.
 SELECT sma_ram AS "RAM", COUNT(*) AS "Cantidad" FROM PCInventory GROUP BY sma_ram HAVING COUNT(*)>=2 ORDER BY "Cantidad" DESC LIMIT 3;
 
--- Cuántos 
+-- Cuántos computadores hay por cantidad de RAM, mostrando solo 3 registro de los grupos que cuentan con mas ram, ordenados de mayor a menor
 SELECT sma_ram AS "RAM", COUNT(*) AS "Cantidad" FROM PCInventory GROUP BY sma_ram HAVING COUNT(*)>=2 ORDER BY sma_ram DESC LIMIT 3;
 
-/*
--- Liste las computadoras que pretenecen a los 3 grupos mayores de RAM. Si una computadora pertenece a la 4ta mayor agrupacion de RAM , dicha computadora no debe aparecer en la  bisqueda.
-SELECT PC1.sma_ram AS "RAM", PC1.tex_name AS "Modelo" FROM PCInventory AS "PC1" INNER JOIN (SELECT sma_ram AS "RAM", COUNT(*) AS "Cantidad" FROM PCInventory GROUP BY sma_ram HAVING COUNT(*)>=2 ORDER BY sma_ram DESC LIMIT 3) AS "PC2" ON PC1.sma_ram=PC2.RAM; 
-*/
+-- Liste las computadoras que pertenecen a los 3 grupos mayores de RAM. Si una computadora pertenece a la 4ta mayor agrupacion de RAM , dicha computadora no debe aparecer en la  bisqueda.
+SELECT * FROM PCInventory;
+
+SELECT sma_ram FROM PCInventory GROUP BY sma_ram ORDER BY sma_ram DESC LIMIT 3;
+
+SELECT * FROM PCInventory INNER JOIN (SELECT sma_ram FROM PCInventory GROUP BY sma_ram ORDER BY sma_ram DESC LIMIT 3) AS PCGroupRAM ON PCInventory.sma_ram = PCGroupRAM.sma_ram;
+
+/*En clase*/
+SELECT tex_name FROM PCInventory JOIN (SELECT sma_ram AS "RAM", COUNT(*) AS "Cantidad" FROM PCInventory GROUP BY sma_ram HAVING COUNT(*)>=2 ORDER BY sma_ram DESC LIMIT 3) PCGroup ON PCInventory.sma_ram = PCGroup.`RAM`;
+
+SELECT * FROM PCInventory JOIN (SELECT sma_ram AS "RAM", COUNT(*) AS "Cantidad" FROM PCInventory GROUP BY sma_ram HAVING COUNT(*)>=2 ORDER BY sma_ram DESC LIMIT 3) PCGroup ON PCInventory.sma_ram = PCGroup.`RAM`;
+
+SELECT * FROM PCInventory LEFT JOIN (SELECT sma_ram AS "RAM", COUNT(*) AS "Cantidad" FROM PCInventory GROUP BY sma_ram HAVING COUNT(*)>=2 ORDER BY sma_ram DESC LIMIT 3) PCGroup ON PCInventory.sma_ram = PCGroup.`RAM`;
+
+-- De las computadoras anteriores que pertenecen a los 3 grupos mayores de Ram, se desea ver de que marca son. De forma anticipada. usted como empleado de la empresa, sabe que la marca de la computadora siempre es "la primer palabra" en el nombre del inventario.
+SELECT DISTINCT SUBSTRING_INDEX(tex_name, ' ', 1) FROM (SELECT tex_name FROM PCInventory JOIN (SELECT sma_ram AS "RAM", COUNT(*) AS "Cantidad" FROM PCInventory GROUP BY sma_ram HAVING COUNT(*)>=2 ORDER BY sma_ram DESC LIMIT 3) PCGroup ON PCInventory.sma_ram = PCGroup.`RAM`) AS PCGroupNoBigRam;
+
+SELECT DISTINCT SUBSTRING_INDEX(tex_name, ' ', 1) FROM PCInventory;
+
+-- Todas las computadoras en inventario que no pertenecen a las marcas de los 3 grupos mas grandes de RAM. 
+SELECT DISTINCT SUBSTRING_INDEX(tex_name, ' ', 1) AS "Marca Respuesta 1" FROM PCInventory WHERE SUBSTRING_INDEX(tex_name, ' ', 1) NOT IN (SELECT DISTINCT SUBSTRING_INDEX(tex_name, ' ', 1) FROM (SELECT tex_name FROM PCInventory JOIN (SELECT sma_ram AS "RAM", COUNT(*) AS "Cantidad" FROM PCInventory GROUP BY sma_ram HAVING COUNT(*)>=2 ORDER BY sma_ram DESC LIMIT 3) PCGroup ON PCInventory.sma_ram = PCGroup.`RAM`) AS PCGroupNoBigRam);
+
+-- Todas las computadoras en inventario que no pertenecen a las marcas de los 3 grupos mas grandes de RAM. No use el operador IN. en su lugar aplique JOIN para verificar la existecia en las listas.
+
+SELECT GroupNoBigRam.`Marca1` AS "Marca Respuesta 2" FROM (SELECT DISTINCT SUBSTRING_INDEX(tex_name, ' ', 1) AS "Marca1" FROM PCInventory) AS GroupNoBigRam LEFT JOIN (SELECT DISTINCT SUBSTRING_INDEX(tex_name, ' ', 1) AS "Marca2" FROM (SELECT tex_name FROM PCInventory JOIN (SELECT sma_ram AS "RAM", COUNT(*) AS "Cantidad" FROM PCInventory GROUP BY sma_ram HAVING COUNT(*)>=2 ORDER BY sma_ram DESC LIMIT 3) PCGroup ON PCInventory.sma_ram = PCGroup.`RAM`) AS PCGroupNoBigRam) AS GroupBigRam ON GroupNoBigRam.`Marca1` = GroupBigRam.`Marca2` WHERE GroupBigRam.`Marca2` IS NULL;
