@@ -86,18 +86,17 @@ INSERT INTO Teacher(tex_first_name, tex_last_name, dec_salary) VALUES
     ("Pablo", "Solorzano", 20000.00)
 ;
 
-INSERT INTO Section(id_teacher, id_subject)
-VALUES 
-    (1,1),
-    (1,2),
-    (1,3),
-    (2,3),
-    (2,4),
-    (3,1),
-    (3,2),
-    (4,6),
-    (4,7),
-    (5,5)
+INSERT INTO Section(id_teacher, id_subject, chr_section) VALUES 
+    (1,1, '1200'),
+    (1,2, '1500'),
+    (1,3, '0900'),
+    (2,3, '0800'),
+    (2,4, '1000'),
+    (3,1, '1100'),
+    (3,2, '1200'),
+    (4,6, '1400'),
+    (4,7, '1500'),
+    (5,5, '1800')
 ;
 
 INSERT INTO Enroll(id_student, id_section)
@@ -116,3 +115,16 @@ VALUES
    (3,5)
 ;
 
+/*Nombre de Docentes*/
+SELECT CONCAT(Teacher.tex_first_name, " ", Teacher.tex_last_name)  as "Docente" FROM Teacher;
+
+/*Secciones Detalles*/
+SELECT Section.id, Section.chr_section  AS "Seccion", UniSubject.tex_name AS "Asignatura", CONCAT(Teacher.tex_first_name, " ", Teacher.tex_last_name) AS "Docente" FROM Section JOIN UniSubject ON Section.id_subject = UniSubject.id JOIN Teacher ON Section.id_teacher = Teacher.id;
+
+/*Secciones detalles mas alumnos matriculados*/
+SELECT Section.id, Section.chr_section, UniSubject.tex_name AS "Asignatura", CONCAT(Teacher.tex_first_name, " ", Teacher.tex_last_name) AS "Docente", COUNT(Enroll.id) AS "Alumnos Matriculados" FROM Enroll JOIN Student ON Enroll.id_student = Student.id RIGHT JOIN Section ON Enroll.id_section = Section.id JOIN UniSubject ON Section.id_subject = UniSubject.id JOIN Teacher ON Section.id_teacher = Teacher.id GROUP BY Section.id;
+
+/*Clases matriculadas por estudiante*/
+SELECT Student.id, CONCAT(Student.tex_first_name, " ", Student.tex_last_name) AS "Estudiante" ,COUNT(*) AS "Clases matriculadas" FROM Enroll JOIN Student ON Enroll.id_student = Student.id GROUP BY Student.id;
+
+SELECT AVG(StudentClass.`Clases matriculadas`) AS "Promedio CLases matriculadas" FROM (SELECT Student.id, CONCAT(Student.tex_first_name, " ", Student.tex_last_name) AS "Estudiante" ,COUNT(*) AS "Clases matriculadas" FROM Enroll JOIN Student ON Enroll.id_student = Student.id GROUP BY Student.id) AS StudentClass;
