@@ -23,6 +23,7 @@ CREATE TABLE Teacher(
     tex_last_name TEXT NOT NULL,
     dec_salary DECIMAL(10,2) NOT NULL
 );
+/*CHECK (dec_salary>10000)*/
 
 /* Another option to add FOREIGN CONSTRAINT: id_subject INT NOT NULL REFERENCES UniSubject (id)*/
 CREATE TABLE Section(
@@ -37,6 +38,8 @@ CREATE TABLE Enroll(
     id_student INT NOT NULL,
     id_section INT NOT NULL
 );
+
+/*-----------------------------CONSTRAINTS---------------------------------------*/
 
 /*DMS: Adding data and constraints to each table that need it*/
 ALTER TABLE Section
@@ -61,6 +64,16 @@ ALTER TABLE Enroll
         FOREIGN KEY (id_section) REFERENCES Section (id)
         ON UPDATE CASCADE 
         ON DELETE CASCADE;
+
+ALTER TABLE Teacher
+    ADD CONSTRAINT CHK_minimumSalary CHECK (dec_salary>=10000);
+
+/*
+ALTER TABLE Teacher
+    ADD CHECK (dec_salary>=10000);
+*/
+
+/*-----------------------------INSERT---------------------------------------*/
     
 INSERT INTO Student (tex_first_name, tex_last_name) VALUES
     ("Gabriel","Escobar"),
@@ -115,6 +128,7 @@ VALUES
    (3,5)
 ;
 
+/*-----------------------------QUERIES---------------------------------------*/
 /*Nombre de Docentes*/
 SELECT CONCAT(Teacher.tex_first_name, " ", Teacher.tex_last_name)  as "Docente" FROM Teacher;
 
@@ -127,4 +141,23 @@ SELECT Section.id, Section.chr_section, UniSubject.tex_name AS "Asignatura", CON
 /*Clases matriculadas por estudiante*/
 SELECT Student.id, CONCAT(Student.tex_first_name, " ", Student.tex_last_name) AS "Estudiante" ,COUNT(*) AS "Clases matriculadas" FROM Enroll JOIN Student ON Enroll.id_student = Student.id GROUP BY Student.id;
 
+/*Promedio clases matriculadas*/
 SELECT AVG(StudentClass.`Clases matriculadas`) AS "Promedio CLases matriculadas" FROM (SELECT Student.id, CONCAT(Student.tex_first_name, " ", Student.tex_last_name) AS "Estudiante" ,COUNT(*) AS "Clases matriculadas" FROM Enroll JOIN Student ON Enroll.id_student = Student.id GROUP BY Student.id) AS StudentClass;
+
+/*-----------------------------DELETE---------------------------------------*/
+SELECT Section.id, Section.chr_section  AS "Seccion", UniSubject.tex_name AS "Asignatura", CONCAT(Teacher.tex_first_name, " ", Teacher.tex_last_name) AS "Docente" FROM Section JOIN UniSubject ON Section.id_subject = UniSubject.id JOIN Teacher ON Section.id_teacher = Teacher.id;
+
+DELETE FROM Teacher WHERE id=1;
+
+SELECT Section.id, Section.chr_section  AS "Seccion", UniSubject.tex_name AS "Asignatura", CONCAT(Teacher.tex_first_name, " ", Teacher.tex_last_name) AS "Docente" FROM Section JOIN UniSubject ON Section.id_subject = UniSubject.id JOIN Teacher ON Section.id_teacher = Teacher.id;
+
+/*-----------------------------UPDATE---------------------------------------*/
+SELECT * FROM TEACHER;
+UPDATE  Teacher SET dec_salary =  99000 WHERE id=2;
+SELECT * FROM TEACHER;
+
+/*Throws a error created by the constraint of minimum Salary*/
+SELECT * FROM TEACHER;
+UPDATE  Teacher SET dec_salary =  9000 WHERE id=2;
+SELECT * FROM TEACHER;
+
