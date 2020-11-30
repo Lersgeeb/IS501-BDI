@@ -1,3 +1,15 @@
+/*
+    !Ejercicio práctico de base de datos con IndexedDB
+    
+    ? Este ejercico se basa en controlar las 4 formas principales de manipulacion(CREATE, UPDATE, SELECT, DELETE) de información de una base de datos.
+    ? Tambien es importante la investigación de cursores para poder navegar alrededor de la base de datos.
+    ? Hace uso de tecnologías como HTML para crear la estructura y los componentes de una pagina web y Javascript para crear distintas funcionalidades que nos ayudaran a manipular la base de datos. 
+    
+    @author geescobar@unah.hn
+    @version 0.1
+    @date 2020/11/30
+*/
+
 /*-------------------------------Inicializando indexeddb-------------------------------*/
 /*  
     ! request.onerror
