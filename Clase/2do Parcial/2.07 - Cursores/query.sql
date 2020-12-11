@@ -1,8 +1,8 @@
-USE CursorProssesing;
+USE CursorProcessing;
 
 SELECT COUNT(*) AS "Count" FROM Measure;
 
-SET @minValue = 37;
+SET @minValue = 40;
 
 CALL sp_sumarizeData(@minValue);
 

@@ -4,7 +4,7 @@ USE CursorProcessing;
 
 DROP TABLE IF EXISTS Measure;
 DROP TABLE IF EXISTS MeasureReviewed;
-DROP TABLE IF EXISIS MeasureSumarized;
+DROP TABLE IF EXISTS MeasureSumarized;
 
 CREATE TABLE Measure (
     id INT AUTO_INCREMENT PRIMARY KEY COMMENT "AutoIncremental.",
@@ -20,23 +20,23 @@ CREATE TABLE MeasureReviewed (
     FOREIGN KEY (num_measure_fk) REFERENCES Measure(id) ON DELETE CASCADE ON UPDATE CASCADE
 ) COMMENT="Histórico de versiones automáticas";
 
-INSERT INTO Measure(num_device, num_temperatur,dat_date) VALUES (1,36,42,'220-12-01 20:45:11'),
-(3,37,25,'220-12-01 20:45:11'),
-(1,37,22,'220-12-01 20:45:11'),
-(2,38,66,'220-12-01 20:45:11'),
-(2,38,32,'220-12-01 20:45:12'),
-(3,38,40,'220-12-01 20:45:12'),
-(1,39,52,'220-12-01 20:45:12'),
-(2,39,11,'220-12-01 20:45:12'),
-(1,40,25,'220-12-01 20:45:13'),
-(3,40,22,'220-12-01 20:45:13'),
-(1,41,62,'220-12-01 20:45:13'),
-(2,41,38,'220-12-01 20:45:14'),
-(2,42,16,'220-12-01 20:45:14'),
-(3,42,58,'220-12-01 20:45:14'),
-(1,42,29,'220-12-01 20:45:15'),
-(2,43,32,'220-12-01 20:45:15'),
-(1,43,60,'220-12-01 20:45:15')
+INSERT INTO Measure(num_device, num_temperature,dat_date) VALUES (1,36.42,'2020-12-01 20:45:11'),
+(3,37.25,'2020-12-01 20:45:11'),
+(1,37.22,'2020-12-01 20:45:11'),
+(2,38.66,'2020-12-01 20:45:11'),
+(2,38.32,'2020-12-01 20:45:12'),
+(3,38.40,'2020-12-01 20:45:12'),
+(1,39.52,'2020-12-01 20:45:12'),
+(2,39.11,'2020-12-01 20:45:12'),
+(1,40.25,'2020-12-01 20:45:13'),
+(3,40.22,'2020-12-01 20:45:13'),
+(1,41.62,'2020-12-01 20:45:13'),
+(2,41.38,'2020-12-01 20:45:14'),
+(2,42.16,'2020-12-01 20:45:14'),
+(3,42.58,'2020-12-01 20:45:14'),
+(1,42.29,'2020-12-01 20:45:15'),
+(2,43.32,'2020-12-01 20:45:15'),
+(1,43.60,'2020-12-01 20:45:15')
 ;
 
 CREATE TABLE MeasureSumarized (
@@ -47,10 +47,11 @@ CREATE TABLE MeasureSumarized (
 -- Insert one registry for MeasureSumarized
 INSERT INTO MeasureSumarized() VALUES ();
 
-DROP PROCEDURE IF EXISTS sp_sumarizeDate;
+DROP PROCEDURE IF EXISTS sp_sumarizeData;
 
 DELIMITER $$
-CREATE PROCEDURE sp_sumarizeDate(
+
+CREATE PROCEDURE sp_sumarizeData(
     IN minValue INT
 )
 BEGIN
@@ -66,6 +67,7 @@ BEGIN
             SELECT id,num_temperature FROM Measure; /*--JOIN MeasureReviewed ... cambio para no recorrer los registros ya revisados*/
 
     DECLARE CONTINUE HANDLER FOR NOT FOUND SET finished = 1;
+
     OPEN cursorCounter;
         getCounter: LOOP
             FETCH cursorCounter INTO theId, theTemp;
@@ -85,4 +87,5 @@ BEGIN
     UPDATE MeasureSumarized SET num_lower = lowerCounter, num_higher = higherCounter;
 
 END$$
-DELIMITER;
+
+DELIMITER ;
